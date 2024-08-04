@@ -1,4 +1,5 @@
 from strategies.base_strategy import BaseStrategy
+from utils.make_data import calculate_k_line
 
 
 # 定义Pinbar策略类，继承自BaseStrategy
