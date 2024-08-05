@@ -1,6 +1,6 @@
 
 # 计算数据
-def calculate_k_line(row):
+def calculate_k_line(row, point_number):
     # 计算实体长度
     body = abs(row['close'] - row['open'])
     # 计算上影线长度
@@ -14,8 +14,8 @@ def calculate_k_line(row):
     # 定义总长
     long = row['high'] - row['low']
     return {
-        'body': round(body, 2),
-        'long_shadow': round(long_shadow, 2),
-        'short_shadow': round(short_shadow, 2),
-        'long': round(long, 2)
+        'body': round(body, int(point_number)),
+        'long_shadow': round(long_shadow, int(point_number)),
+        'short_shadow': round(short_shadow, int(point_number)),
+        'long': round(long, int(point_number))
     }

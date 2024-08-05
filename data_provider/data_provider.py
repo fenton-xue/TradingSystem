@@ -32,11 +32,13 @@ class DataProvider:
         return df
 
     # 定义方法，用于获取指定数据
-    def fetch_single_data(self, start_time, limit=1):
+    def fetch_single_data(self, start_time, point_number=2):
         # 时间先减去8
         start_time = subtract_hours_from_timestamp(start_time)
         # 从交易所获取数据
-        data = self.exchange.fetch_ohlcv(self.symbol, self.timeframe, since=self.exchange.parse8601(start_time), limit=limit)
+        data = self.exchange.fetch_ohlcv(
+            self.symbol, self.timeframe, since=self.exchange.parse8601(start_time), limit=1
+        )
         # 将数据转换为pandas DataFrame
         df = pd.DataFrame(data, dtype=float)
         # 重命名
@@ -50,12 +52,13 @@ class DataProvider:
         df_dict = df.to_dict()
         kline_data1 = {
             'candle_begin_time_GMT8': f"{df_dict['candle_begin_time_GMT8'][0]}",
+            'trading_target': self.symbol,
             'open': df_dict['open'][0],
             'high': df_dict['high'][0],
             'low': df_dict['low'][0],
             'close': df_dict['close'][0],
         }
-        kline_data2 = calculate_k_line(kline_data1)
+        kline_data2 = calculate_k_line(kline_data1, point_number)
         return {**kline_data1, **kline_data2}
 
 

@@ -9,6 +9,7 @@ class MakeExcel:
         # 字典键与Excel列名的映射关系
         self.key_to_header = {
             "candle_begin_time_GMT8": "日期",
+            "trading_target": "币种",
             "open": "开盘价",
             "high": "最高价",
             "low": "最低价",
