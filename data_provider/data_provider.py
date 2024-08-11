@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import timedelta
 
 from utils.logger import subtract_hours_from_timestamp
-from utils.make_data import calculate_k_line
+from utils.pattern_utils import calculate_k_line
 
 
 # 定义数据提供类
@@ -28,7 +28,19 @@ class DataProvider:
         # 北京时间
         df['candle_begin_time_GMT8'] = df['candle_begin_time'] + timedelta(hours=8)
         # 整理列的顺序
-        df = df[['candle_begin_time_GMT8', 'open', 'high', 'low', 'close', 'volume']]
+        df = df[['candle_begin_time_GMT8', 'open', 'high', 'low', 'close']]
+
+        # 计算开盘价的小数点个数
+        value_str = str(df['open'][0])
+        if '.' in value_str:
+            point_number = len(value_str.split('.')[1])
+        else:
+            point_number = 0  # 如果没有小数部分，返回0
+
+        # 将计算结果作为新列加入到 DataFrame 中
+        calculated_values = df.apply(calculate_k_line, axis=1, args=(point_number,))
+        # 将每个计算值展开为多个列，并加入到原始 DataFrame 中
+        df = pd.concat([df, calculated_values.apply(pd.Series)], axis=1)
         return df
 
     # 定义方法，用于获取指定数据

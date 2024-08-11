@@ -18,14 +18,19 @@ def get_logger(name):
 # 输出结果到文件
 def output_to_file(data):
     # 获取当前时间并格式化
-    now = datetime.datetime.now()
+    now = datetime.now()
     current_time = now.strftime("%Y%m%dT%H：%M：%S")
     # 文件名
-    filepath = f"E:\\WorkSpace\\PythonCode\\TradingSystem\\TradingSystem\\output\\{current_time}.txt"
+    filepath = f"E:\\WorkSpace\\PythonCode\\TradingSystem\\TradingSystem\\output\\{current_time}.log"
 
     # 使用with语句打开文件并写入内容
     with open(filepath, 'w', encoding='utf-8') as file:
-        file.write(data)
+        if isinstance(data, pd.DataFrame):
+            # 如果data是DataFrame，使用to_string()方法转换为字符串
+            file.write(data.to_string())
+        else:
+            # 否则直接写入字符串内容
+            file.write(str(data))
     print(f"内容已写入到文件：{filepath}")
 
 
